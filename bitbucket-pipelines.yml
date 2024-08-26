@@ -1,0 +1,115 @@
+# bitbucket-pipelines.yml
+# https://support.atlassian.com/bitbucket-cloud/docs/bitbucket-pipelines-configuration-reference/
+image:
+  name: "530906725318.dkr.ecr.eu-west-2.amazonaws.com/hernanlytics-landing-core:latest"
+  aws:
+    access-key: $AWS_ACCESS_KEY_ID
+    secret-key: $AWS_SECRET_ACCESS_KEY
+
+clone:
+   depth: full
+
+definitions:
+  cached:
+    build_artifacts:
+       - terraform/.terraform.lock.hcl
+       - terraform/.terraform/**
+       - bin/tools/website/dist/**
+
+  services:
+    docker:
+      memory: 2048
+
+  steps:
+    static_analysis: &static_analysis
+      name: Static analysis
+      services:
+        - docker
+      cached:
+        - docker
+      script:
+          - ./scripts/static_analysis.sh
+     
+    deploy: &deploy
+      name: Deploy
+      script:
+        - chmod +x ./scripts/deploy.sh 
+        - ./scripts/deploy.sh  
+
+    setup_environment: &terraform_init
+      name: Initial
+      cached:
+        - build_artifacts
+      script:
+        - chmod +x ./scripts/terraform_init.sh
+        - ./scripts/terraform_init.sh                  
+      artifacts:
+        - terraform/.terraform/**
+        - terraform/.terraform.lock.hcl
+
+    cleanup: &cleanup_and_destroy
+      name: Pre-cleanup
+      script:
+        - chmod +x ./scripts/utils.sh  && . ./scripts/utils.sh
+        - chmod +x ./scripts/destroy.sh
+        - export ENVIRONMENT_NAME=$(get_recent_merged_branch_name)
+        - ./scripts/destroy.sh
+
+    build_web_application: &build_web_application
+      name: Build web application
+      cached:
+        - build_artifacts
+      artifacts:
+        - bin/tools/website/dist/**
+      script:
+        -  chmod +x ./scripts/build_web_application.sh
+        - ./scripts/build_web_application.sh
+
+    create_unrelease_tag: &create_unrelease_tag
+      name: Create release tag
+      script:
+        -  chmod +x ./scripts/create_release_tag.sh
+        - ./scripts/create_release_tag.sh
+      
+    deploy_web_application: &deploy_web_application
+      name: Deploy web application
+      script:
+        -  chmod +x ./scripts/deploy_web_content.sh
+        - ./scripts/deploy_web_content.sh
+ 
+
+pipelines:
+
+  branches:
+    master:
+      - step: *static_analysis
+      - parallel:
+          steps:
+            - step: *build_web_application      
+            - step: *terraform_init            
+      - step: *cleanup_and_destroy
+      - stage:
+          name: Deploy to SIT
+          deployment: SIT
+          steps: 
+            - step: *deploy
+            - step: *deploy_web_application
+      - step: *create_unrelease_tag 
+             
+    feature/**:
+      - step: *static_analysis
+      - step: *build_web_application   
+      - stage:
+          name: Deploy feature
+          condition:
+            changesets:
+              includePaths:
+                - "**/*.tf"
+                - "scripts/*.sh"
+                - "*.yml"
+                - "*.tfvars"
+                - "**/*.tsx"
+          steps:          
+            - step: *terraform_init
+            - step: *deploy
+            - step: *deploy_web_application
