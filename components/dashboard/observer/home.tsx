@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import {
   DashboardSurvey,
+  fetchActiveSurveyParts,
   fetchPreviousSurveys,
   fetchSurveys,
 } from "@/store/slices/dashboardSurvey";
@@ -122,7 +123,9 @@ export default function ObserverHome(props: any) {
 
       {selectedSurvey && (
         <div className="md:mt-20 mt-10">
-          <StartSurvey />
+          <StartSurvey 
+          // onStartSurvey={ (id: number)=> dispatch(fetchActiveSurveyParts(id))}
+           />
         </div>
       )}
     </div>

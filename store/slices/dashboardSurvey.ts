@@ -110,11 +110,11 @@ export const fetchUpcomingSurveys = createAsyncThunk(
 // Async thunk to fetch active survey parts
 export const fetchActiveSurveyParts = createAsyncThunk(
   'surveys/fetchActiveSurveyParts',
-  async (_, thunkAPI) => {
+  async (surveypart_id: string, thunkAPI) => {
     const state = thunkAPI.getState() as RootState;
     const token = state.auth.token || localStorage.getItem('auth_token');
 
-    const response = await fetch('https://veoapi.cogai.uk/surveys/active_surveyparts', {
+    const response = await fetch(`https://veoapi.cogai.uk/survey_questions/${surveypart_id}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,

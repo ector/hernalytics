@@ -29,14 +29,14 @@ const surveyHeaderRows = [
 export default function ObserverSurvey(): React.ReactNode {
   const [showSurvey, setShowSurvey] = React.useState<boolean>(false);
   const user: any = useSelector((state: RootState) => state.auth.user);
-  const { surveys, previousSurveys, status: prevStatus, error: prevError } = useSelector(
+  const { previousSurveys, status: prevStatus, error: prevError } = useSelector(
     (state: RootState) => state.dashboard
   );
  
 
   return (
     <>
-      <ObserverNav user={user} />
+      <ObserverNav />
       <div className="pt-5 pb-20 px-8 lg:px-20">
         {!showSurvey && (
           <>
@@ -79,7 +79,4 @@ export default function ObserverSurvey(): React.ReactNode {
       <Footer />
     </>
   );
-}
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
 }

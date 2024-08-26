@@ -17,7 +17,7 @@ export default function ObserverSettings(): React.ReactNode {
   const user: any = useSelector((state: RootState) => state.auth.user);
   return (
     <>
-      <ObserverNav user={user} />
+      <ObserverNav />
 
       <div className="pt-5 pb-5 px-8 lg:px-20">
         {/* Header */}

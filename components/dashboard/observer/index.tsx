@@ -23,7 +23,7 @@ export default function Observer(): React.ReactNode {
 
   return (
     <>
-      <ObserverNav user={user} />
+      <ObserverNav />
       <ObserverHome user={user} />
       <Footer />
     </>
