@@ -2,20 +2,14 @@ import React from "react";
 
 import Table from "./table";
 import Dropdown from "./drop-down";
-
-interface tableData {
-  survey: React.ReactNode;
-  status: React.ReactNode;
-  date: string;
-  time: string;
-}
+import { DashboardSurvey } from "@/store/slices/dashboardSurvey";
 
 export default function SurveysTable({
   headerRows,
   tableData,
 }: {
   headerRows: string[];
-  tableData: tableData[];
+  tableData: DashboardSurvey[];
 }): React.ReactNode {
   const dropOptions = ["Most Recent", "Date", "Time"];
 

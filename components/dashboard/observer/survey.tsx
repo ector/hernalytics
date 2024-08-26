@@ -29,81 +29,10 @@ const surveyHeaderRows = [
 export default function ObserverSurvey(): React.ReactNode {
   const [showSurvey, setShowSurvey] = React.useState<boolean>(false);
   const user: any = useSelector((state: RootState) => state.auth.user);
-  const dispatch = useDispatch<AppDispatch>();
-  const { upcomingSurveys, status, error } = useSelector(
+  const { surveys, previousSurveys, status: prevStatus, error: prevError } = useSelector(
     (state: RootState) => state.dashboard
   );
-
-  // useEffect(() => {
-  //   dispatch(fetchUpcomingSurveys());
-  // }, [dispatch]);
-
-  if (status === "loading") return <div>Loading...</div>;
-  if (status === "failed") return <div>{error}</div>;
-
-  // console.log(upcomingSurveys);
-  const surveyTableData = [
-    {
-      survey: (
-        <span className="cursor-pointer" onClick={() => setShowSurvey(true)}>
-          Edo Governorship Election Survey
-        </span>
-      ),
-      status: <Tag variant={"complete"}>Submitted</Tag>,
-      date: "21/01/2024",
-      time: "9:00am",
-    },
-    {
-      survey: (
-        <span className="cursor-pointer" onClick={() => setShowSurvey(true)}>
-          Ondo Governorship Election Survey
-        </span>
-      ),
-      status: <Tag variant={"pending"}>Incomplete</Tag>,
-      date: "21/01/2024",
-      time: "9:00am",
-    },
-    {
-      survey: (
-        <span className="cursor-pointer" onClick={() => setShowSurvey(true)}>
-          Ondo Governorship Election Survey
-        </span>
-      ),
-      status: <Tag variant={"danger"}>Not started</Tag>,
-      date: "21/01/2024",
-      time: "9:00am",
-    },
-    {
-      survey: (
-        <span className="cursor-pointer" onClick={() => setShowSurvey(true)}>
-          Ondo Governorship Election Survey
-        </span>
-      ),
-      status: <Tag variant={"danger"}>Not started</Tag>,
-      date: "21/01/2024",
-      time: "9:00am",
-    },
-    {
-      survey: (
-        <span className="cursor-pointer" onClick={() => setShowSurvey(true)}>
-          Ondo Governorship Election Survey
-        </span>
-      ),
-      status: <Tag variant={"danger"}>Not started</Tag>,
-      date: "21/01/2024",
-      time: "9:00am",
-    },
-    {
-      survey: (
-        <span className="cursor-pointer" onClick={() => setShowSurvey(true)}>
-          Ondo Governorship Election Survey
-        </span>
-      ),
-      status: <Tag variant={"danger"}>Not started</Tag>,
-      date: "21/01/2024",
-      time: "9:00am",
-    },
-  ];
+ 
 
   return (
     <>
@@ -126,7 +55,7 @@ export default function ObserverSurvey(): React.ReactNode {
             <div className="mt-20">
               <SurveysTable
                 headerRows={surveyHeaderRows}
-                tableData={surveyTableData}
+                tableData={previousSurveys}
               />
             </div>
           </>
