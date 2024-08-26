@@ -6,7 +6,7 @@ export default function Table({
   tableData,
 }: {
   headerRows: string[];
-  tableData: DashboardSurvey[];
+  tableData: DashboardSurvey[] | any;
 }): React.ReactNode {
   return (
     <table

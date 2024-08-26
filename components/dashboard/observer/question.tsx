@@ -33,7 +33,10 @@ export default function SurveyQuestion({ id }: { id: string }): JSX.Element {
   };
 
   const handleNextCategory = () => {
-    if (currentCategoryIndex < activeSurveyParts?.categories.length - 1) {
+    if (
+      activeSurveyParts?.categories &&
+      currentCategoryIndex < activeSurveyParts.categories.length - 1
+    ) {
       setCurrentCategoryIndex(currentCategoryIndex + 1);
     }
   };
@@ -44,21 +47,23 @@ export default function SurveyQuestion({ id }: { id: string }): JSX.Element {
     }
   };
 
-  if (!activeSurveyParts) {
+  if (!activeSurveyParts || !activeSurveyParts.categories) {
     return <div>Loading...</div>;
   }
 
-  const currentCategory = activeSurveyParts?.categories[currentCategoryIndex];
+  const currentCategory = activeSurveyParts.categories[currentCategoryIndex];
 
   return (
+    <>
+    <h1 className="pl-20 py-10 text-bold">{activeSurveyParts.title}</h1>
     <div className="space-y-6 w-[40vw] m-auto mt-10">
       {/* Indicator */}
       <div className="flex justify-between items-center mb-6">
-        {activeSurveyParts?.categories.map((category: any, index: number) => (
+        {activeSurveyParts.categories.map((category: any, index: number) => (
           <div
             key={index}
             className={`flex-1 h-2 mx-1 rounded-full ${
-              index <= currentCategoryIndex ? "bg-blue-600" : "bg-gray-300"
+              index <= currentCategoryIndex ? "bg-primary-cGreen74" : "bg-gray-300"
             }`}
           ></div>
         ))}
@@ -124,7 +129,7 @@ export default function SurveyQuestion({ id }: { id: string }): JSX.Element {
             type="submit"
             onClick={handleNextCategory}
             disabled={
-              currentCategoryIndex === activeSurveyParts?.categories.length - 1
+              currentCategoryIndex === activeSurveyParts.categories.length - 1
             }
             className="w-full py-[15px] px-10 bg-primary-cGreen74 font-semibold text-[17px] text-white rounded uppercase"
           >
@@ -133,5 +138,6 @@ export default function SurveyQuestion({ id }: { id: string }): JSX.Element {
         </div>
       </div>
     </div>
+    </>
   );
 }
