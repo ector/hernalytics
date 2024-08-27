@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { fetchCurrentUser, User } from "@/store/slices/auth";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LogoutModal: React.FC<{
   onConfirm: () => void;
@@ -135,29 +136,34 @@ export default function DashboardHeader(): React.JSX.Element {
 
               <MenuItem>
                 {({ active }) => (
-                  <button
+                  <Link href="">
+                   <button
                     className={`w-full px-4 py-2 text-left text-sm text-black`}
                   >
                     Dashboard
                   </button>
+                  </Link>
+                 
                 )}
               </MenuItem>
               <MenuItem>
                 {({ active }) => (
+                  <Link href="/observer/survey">
                   <button
                     className={`w-full px-4 py-2 text-left text-sm text-black`}
                   >
                     Survey
-                  </button>
+                  </button></Link>
                 )}
               </MenuItem>
               <MenuItem>
                 {({ active }) => (
+                 <Link href="/observer/settings">
                   <button
                     className={`w-full px-4 py-2 text-left text-sm text-black`}
                   >
                     Account Settings
-                  </button>
+                  </button></Link>
                 )}
               </MenuItem>
               <MenuItem>

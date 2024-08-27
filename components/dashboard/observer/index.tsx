@@ -13,7 +13,7 @@ export default function Observer(): React.ReactNode {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center h-screen p-fixed">
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
         <div className="loader blinking-logo">
           <AppLogo />
         </div>

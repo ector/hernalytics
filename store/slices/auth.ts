@@ -78,6 +78,35 @@ export const fetchCurrentUser = createAsyncThunk(
   }
 );
 
+// Define the async thunk for forgot password
+export const forgotPassword = createAsyncThunk(
+  'auth/forgotPassword',
+  async ({ password, confirm_password }: { password: string; confirm_password: string }, { getState, rejectWithValue }) => {
+    const state = getState() as { auth: AuthState };
+    const token = state.auth.token || localStorage.getItem('auth_token');
+
+    try {
+      const response = await fetch('https://veoapi.cogai.uk/change_passwd', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ password, confirm_password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to reset password');
+      }
+
+      return response.json() as Promise<User>;
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  }
+);
+
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -117,6 +146,18 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+      })
+      // Handle forgot password
+      .addCase(forgotPassword.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload; // Update user with the new data if needed
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });

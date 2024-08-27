@@ -99,9 +99,7 @@ export default function ObserverHome(props: any) {
               </div>
             ))
           )}
-          {currentSurveysError && (
-            <div>Error fetching current surveys: {currentSurveysError}</div>
-          )}
+          {currentSurveysError && <div>{currentSurveysError}</div>}
 
           {/* Recent Activities Table */}
           <div className="mt-20">
@@ -115,7 +113,9 @@ export default function ObserverHome(props: any) {
             )}
 
             {previousSurveysError && (
-              <div>Error fetching previous surveys: {previousSurveysError}</div>
+              <div className="w-full p-4 border border-gray-400 rounded-md text-center">
+                <span>{previousSurveysError}</span>
+              </div>
             )}
           </div>
         </>
@@ -123,9 +123,9 @@ export default function ObserverHome(props: any) {
 
       {selectedSurvey && (
         <div className="md:mt-20 mt-10">
-          <StartSurvey 
+          <StartSurvey
           // onStartSurvey={ (id: number)=> dispatch(fetchActiveSurveyParts(id))}
-           />
+          />
         </div>
       )}
     </div>

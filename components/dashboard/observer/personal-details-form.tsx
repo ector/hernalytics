@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { LogOut } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,11 +14,18 @@ import FormControlSettingInput from "@/components/forms/form-control-input-setti
 import { defaultProfileDetailFormValues, profleDetailFormValues } from "@/definitions/profile-form-schemas";
 import CustomFormSettingLabel from "@/components/forms/form-setting-label";
 import { Button } from "@/components/ui/button";
-import { User } from "@/store/slices/auth";
+import { forgotPassword, User } from "@/store/slices/auth";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
 
 export default function PersonalDetailsForm(props: { user: User }): React.ReactNode {
   const { user } = props;
-  
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   // Initialize form with user data
   const form = useForm<z.infer<typeof profleDetailFormValues>>({
     resolver: zodResolver(profleDetailFormValues),
@@ -33,6 +40,31 @@ export default function PersonalDetailsForm(props: { user: User }): React.ReactN
       confirmNewPassword: "",
     },
   });
+
+  // Handle password change
+  const handlePasswordChange = async () => {
+    const { newPassword, confirmNewPassword } = form.getValues();
+
+    if (newPassword && confirmNewPassword) {
+      setLoading(true);
+      setSuccessMessage("");
+      setErrorMessage("");
+
+      try {
+        const result = await dispatch(
+          forgotPassword({ password: newPassword, confirm_password: confirmNewPassword })
+        ).unwrap();
+
+        setSuccessMessage("Password changed successfully!");
+      } catch (error: any) {
+        setErrorMessage(error.message || "Failed to change password. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setErrorMessage("Please fill in both password fields.");
+    }
+  };
 
   return (
     <div className="xl:w-[60%] lg:w-[70%] md:w-[80%] flex flex-col gap-y-5">
@@ -210,9 +242,21 @@ export default function PersonalDetailsForm(props: { user: User }): React.ReactN
           />
         </ProfilePasswordFormWrapper>
 
-        <Button variant={"default"} className="sm:w-max w-full px-[40px]">
-          Change Password
+        <Button variant={"default"} className="sm:w-max w-full px-[40px]" onClick={handlePasswordChange}>
+          {loading ? "Updating..." : "Change Password"}
         </Button>
+
+        {errorMessage && (
+          <div className="text-red-500 text-center mt-4">
+            {errorMessage}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="text-green-500 text-center mt-4">
+            {successMessage}
+          </div>
+        )}
       </div>
 
       <Button
