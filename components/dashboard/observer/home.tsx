@@ -91,20 +91,33 @@ export default function ObserverHome(props: any) {
         <>
           {/* Survey Detail Component */}
           {currentSurveysLoading ? (
-            <div>Loading current surveys...</div>
-          ) : (
+            <div className="w-full my-2 p-20 border border-gray-200 rounded-md text-center">
+              Loading surveys...
+            </div>
+          ) : surveys.length > 0 ? (
             surveys.map((survey: DashboardSurvey, index: number) => (
               <div className="md:mt-20 mt-10" key={index}>
                 <SurveyDescription data={survey} />
               </div>
             ))
+          ) : (
+            <div className="w-full p-10 mt-5 border border-gray-200 rounded-md text-center">
+              You have no active survey. Please, check back.
+            </div>
           )}
-          {currentSurveysError && <div>{currentSurveysError}</div>}
+
+          {currentSurveysError && (
+            <div className="w-full p-10 border border-gray-400 rounded-md text-center">
+              {currentSurveysError}
+            </div>
+          )}
 
           {/* Recent Activities Table */}
           <div className="mt-20">
             {previousSurveysLoading ? (
-              <div>Loading previous surveys...</div>
+              <div className="w-full my-2 p-20 border border-gray-200 rounded-md text-center">
+                Loading recent activities...
+              </div>
             ) : (
               <RecentActivities
                 headerRows={activityHeaderRows}
@@ -112,8 +125,14 @@ export default function ObserverHome(props: any) {
               />
             )}
 
+            {previousSurveys.length === 0 && (
+              <div className="w-full p-10 border border-gray-400  rounded-md text-center">
+                <span>You have not taken a survey yet.</span>
+              </div>
+            )}
+
             {previousSurveysError && (
-              <div className="w-full p-4 border border-gray-400 rounded-md text-center">
+              <div className="w-full p-10 border border-gray-400 rounded-md text-center">
                 <span>{previousSurveysError}</span>
               </div>
             )}
