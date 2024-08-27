@@ -10,6 +10,7 @@ import { AppDispatch } from "@/store/store";
 import { fetchCurrentUser, User } from "@/store/slices/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import RoleIndicator from "./role-indicator";
 
 const LogoutModal: React.FC<{
   onConfirm: () => void;
@@ -130,40 +131,43 @@ export default function DashboardHeader(): React.JSX.Element {
                   <span className="text-black">
                     {user?.firstname + " " + user?.lastname}
                   </span>
-                  <span className="text-gray-500">badge</span>
+                  <div className="w-fit bg-primary-cBlue6F px-2 py-1 text-white text-[10px] leading-tight rounded uppercase">
+                    <span>{user?.role}</span>
+                  </div>
                 </div>
               </div>
 
               <MenuItem>
                 {({ active }) => (
                   <Link href="">
-                   <button
-                    className={`w-full px-4 py-2 text-left text-sm text-black`}
-                  >
-                    Dashboard
-                  </button>
+                    <button
+                      className={`w-full px-4 py-2 text-left text-sm text-black`}
+                    >
+                      Dashboard
+                    </button>
                   </Link>
-                 
                 )}
               </MenuItem>
               <MenuItem>
                 {({ active }) => (
                   <Link href="/observer/survey">
-                  <button
-                    className={`w-full px-4 py-2 text-left text-sm text-black`}
-                  >
-                    Survey
-                  </button></Link>
+                    <button
+                      className={`w-full px-4 py-2 text-left text-sm text-black`}
+                    >
+                      Survey
+                    </button>
+                  </Link>
                 )}
               </MenuItem>
               <MenuItem>
                 {({ active }) => (
-                 <Link href="/observer/settings">
-                  <button
-                    className={`w-full px-4 py-2 text-left text-sm text-black`}
-                  >
-                    Account Settings
-                  </button></Link>
+                  <Link href="/observer/settings">
+                    <button
+                      className={`w-full px-4 py-2 text-left text-sm text-black`}
+                    >
+                      Account Settings
+                    </button>
+                  </Link>
                 )}
               </MenuItem>
               <MenuItem>

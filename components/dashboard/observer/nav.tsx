@@ -29,16 +29,18 @@ export default function ObserverNav(): React.JSX.Element {
               className={cn(
                 "text-primary-cDark65 font-jost text-base hover:text-primary-cGreen74 hover:font-bold duration-300",
                 // pathname.startsWith(link.href) &&
-                pathname === link.href &&
-                  "text-primary-cGreen74 font-bold"
+                pathname === link.href && "text-primary-cGreen74 font-bold"
               )}
             >
               {link.text}
             </Link>
           ))}
         </div>
-
-        {/* <RoleIndicator role={user?.role} /> */}
+        {user?.role && (
+          <div className="w-fit bg-primary-cBlue6F px-2 py-1 text-white text-[10px] leading-tight rounded uppercase">
+            <span>{user?.role}</span>
+          </div>
+        )}
       </div>
     </nav>
   );

@@ -2,22 +2,21 @@
 
 import React from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-
 import { ChevronDown } from "lucide-react";
-
-import { useVEOContext } from "@/providers/veo-context";
 
 export default function Dropdown({
   options,
+  onChange,
 }: {
   options: string[];
+  onChange?: (value: string) => void;
 }): React.ReactNode {
-  const { selectValue, setSelectValue } = useVEOContext();
+  const [selected, setSelected] = React.useState<string>(options[0]);
 
   return (
     <Menu>
       <MenuButton className="inline-flex items-center gap-2 bg-transparent py-1.5 px-3 text-[16px] font-normal text-primary-cDark1D focus:outline-none">
-        {selectValue ? selectValue : options[0]}
+        {selected}
         <ChevronDown className="size-4 fill-white/60" />
       </MenuButton>
 
@@ -30,7 +29,10 @@ export default function Dropdown({
           <MenuItem key={index}>
             <button
               className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10"
-              onClick={() => setSelectValue(item)}
+              onClick={() => {
+                setSelected(item);
+                onChange && onChange(item);
+              }}
             >
               {item}
             </button>
