@@ -91,7 +91,7 @@ export default function ObserverHome(props: any) {
         <>
           {/* Survey Detail Component */}
           {currentSurveysLoading ? (
-            <div className="w-full my-2 p-20 border border-gray-200 rounded-md text-center">
+            <div className="w-full p-10 mt-5 border border-gray-200 rounded-md text-center">
               Loading surveys...
             </div>
           ) : surveys.length > 0 ? (

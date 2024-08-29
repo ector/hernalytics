@@ -4,11 +4,7 @@ import { Button } from "@/components/ui/button";
 import { surveyType } from "@/definitions/survey-types";
 import { DashboardSurvey } from "@/store/slices/dashboardSurvey";
 import { useRouter } from "next/navigation";
-export default function ProcessCard({
-  data
-}: {
-  data: any;
-}): React.ReactNode {
+export default function ProcessCard({ data }: { data: any }): React.ReactNode {
   const router = useRouter();
   return (
     <div className="pl-8 pr-14 py-10 bg-primary-cGreen0D flex items-start justify-between rounded-[8px]">
@@ -23,10 +19,16 @@ export default function ProcessCard({
           Catch up with the top discussions
         </p>
 
-        <Button onClick={()=>{
-          localStorage.setItem('currentSurveyId', data.id);
-          router.push(`survey/${data.id}`)
-        }} disabled={!data.is_active} className="px-[30px]">START SURVEY</Button>
+        <Button
+          onClick={() => {
+            localStorage.setItem("currentSurveyId", data.id);
+            router.push(`survey/${data.id}`);
+          }}
+          disabled={!data.is_active || data.status === "Completed"}
+          className="px-[30px]"
+        >
+          START SURVEY
+        </Button>
       </div>
 
       <>{data.status}</>
