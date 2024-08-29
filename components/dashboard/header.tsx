@@ -18,7 +18,7 @@ const LogoutModal: React.FC<{
   loading: boolean;
 }> = ({ onConfirm, onCancel, loading }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50  z-[100]">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h3 className="text-xl font-semibold mb-4 text-black">
           Confirm Logout
